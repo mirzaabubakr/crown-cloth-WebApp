@@ -1,10 +1,13 @@
-import { async } from "@firebase/util"
 import { initializeApp } from "firebase/app"
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithRedirect,
+  // signInWithRedirect,
   signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
 } from "firebase/auth"
 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"
@@ -32,7 +35,12 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider)
 
 export const db = getFirestore()
 
-export const getUserDocFromAuth = async (userAuth) => {
+export const getUserDocFromAuth = async (
+  userAuth,
+  additionalInformation = {}
+) => {
+  if (!userAuth) return
+
   const userRef = doc(db, "user", userAuth.uid)
   console.log(userRef)
 
@@ -45,7 +53,12 @@ export const getUserDocFromAuth = async (userAuth) => {
     const creatAt = new Date()
 
     try {
-      await setDoc(userRef, { displayName, email, creatAt })
+      await setDoc(userRef, {
+        displayName,
+        email,
+        creatAt,
+        ...additionalInformation,
+      })
     } catch (error) {
       console.log("Error Created", error.message)
     }
@@ -53,3 +66,20 @@ export const getUserDocFromAuth = async (userAuth) => {
 
   return userRef
 }
+
+export const createAuthUserWithEmailandPassword = async (email, password) => {
+  if (!email || !password) return
+
+  return await createUserWithEmailAndPassword(auth, email, password)
+}
+
+export const SignInAuthUserWithEmailandPassword = async (email, password) => {
+  if (!email || !password) return
+
+  return await signInWithEmailAndPassword(auth, email, password)
+}
+
+export const signOutUser = async () => await signOut(auth)
+
+export const onAuthStateChangedListner = (callback) =>
+  onAuthStateChanged(auth, callback)
