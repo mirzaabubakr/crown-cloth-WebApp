@@ -10,7 +10,16 @@ import {
   onAuthStateChanged,
 } from "firebase/auth"
 
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDTptgxC8XqJpPg6LFVH2gnT3xBFpuzSnM",
@@ -22,7 +31,7 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
+initializeApp(firebaseConfig)
 
 const provider = new GoogleAuthProvider()
 
@@ -34,6 +43,36 @@ export const auth = getAuth()
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider)
 
 export const db = getFirestore()
+
+export const addCollectionsAndDocuments = async (
+  collectionKey,
+  objectToAdd
+) => {
+  const collectionRef = collection(db, collectionKey)
+  const batch = writeBatch(db)
+
+  objectToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase())
+    batch.set(docRef, object)
+  })
+
+  await batch.commit()
+  console.log("Done")
+}
+
+export const getCollectionsAndDocuments = async () => {
+  const collectionRef = collection(db, "cetegories")
+  const q = query(collectionRef)
+
+  const querySnapShot = await getDocs(q)
+  const cetegoryMap = querySnapShot.docs.reduce((acc, docSnapShot) => {
+    const { title, items } = docSnapShot.data()
+    acc[title.toLowerCase()] = items
+    return acc
+  }, {})
+
+  return cetegoryMap
+}
 
 export const getUserDocFromAuth = async (
   userAuth,
