@@ -61,7 +61,7 @@ export const addCollectionsAndDocuments = async (
 }
 
 export const getCollectionsAndDocuments = async () => {
-  const collectionRef = collection(db, "cetegories")
+  const collectionRef = collection(db, "categories")
   const q = query(collectionRef)
 
   const querySnapShot = await getDocs(q)

@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 
+
 import { getCollectionsAndDocuments } from '../utils/firebase/firebase.utils'
 
 
@@ -11,7 +12,7 @@ export const CategoriesProvider = ({children}) => {
     const [categoriesMap,setCategoriesMap] = useState({})
 
     // useEffect(()=>{
-    //     addCollectionsAndDocuments('cetegories', SHOP_DATA)
+    //     addCollectionsAndDocuments('categories', SHOP_DATA)
     // },[])
 
     useEffect(()=>{
