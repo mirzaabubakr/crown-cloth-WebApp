@@ -4,8 +4,14 @@ import Navigation from "./components/routes/Nevigation/navigation.component"
 import Authentication from "./components/authentication/authentication.component"
 import Shop from "./components/routes/shop/shop.component"
 import Checkout from "./components/routes/checkout/checkout.components"
+import React from "react"
+import { useEffect } from "react"
 
 const App = () => {
+  useEffect(() => {
+    document.title = "Crown Clothing Store"
+  }, [])
+
   return (
     <Routes>
       <Route path="/" element={<Navigation />}>
