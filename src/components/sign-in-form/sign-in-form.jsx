@@ -32,7 +32,6 @@ const SignIn = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-
         try{
             await SignInAuthUserWithEmailandPassword(email,password)
 //      setCurrentUser(user)
@@ -72,9 +71,8 @@ const SignIn = () => {
 
             <div className="buttons-container">
                 <Button  type='submit'>Sign In</Button>
-                <Button buttonType='google'  onClick={logGoogleUser}>Sign Up</Button>
+                <Button buttonType='google'  onClick={logGoogleUser}>Sign In With Google</Button>
             </div>
-               
             </form>
         </div>
     )
